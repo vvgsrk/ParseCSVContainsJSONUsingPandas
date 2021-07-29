@@ -1,1 +1,1 @@
-python3.7 /PUT_YOUR_PATH/hr_data_parser/hr_data_csv_parser.py "hr_data_dump" "dp-dev-test-bucket" "test-hr-data" "yyyy=2021/mm=04/dd=22" "['countries', 'departments', 'employees', 'job_history', 'jobs', 'locations', 'regions']"
+python3.7 /PUT_YOUR_PATH/hr_data_parser/hr_data_csv_parser.py "ay-dp-dev-test-bucket" "test-hr-data" "ay-dp-dev-test-bucket" "test-hr-data-parquet" "yyyy=2021/mm=04/dd=22" "['countries', 'departments', 'employees', 'job_history', 'jobs', 'locations', 'regions']"

@@ -24,15 +24,6 @@ s3 = boto3.client('s3')
 logger = logging.getLogger(__name__)
 logging.getLogger().setLevel(logging.INFO)
 
-# Get variables from os environment
-'''
-aws_region = os.environ['REGION_NAME']
-dlp_bucket_name = os.environ['TARGET_S3_BUCKET']
-dlp_bucket_name_prefix = os.environ['TARGET_S3_BUCKET_PREFIX']
-'''
-dlp_bucket_name = "ay-dp-dev-test-bucket"
-dlp_bucket_name_prefix = "test-hr-data-parquet"
-
 '''
 Helper functions
 '''
@@ -213,13 +204,15 @@ def parse_hr_data_csv_df(df, bucket_name, bucket_prefix, entity_name):
 CSV Parsing function with parameters
 '''
 
-def parsing_launcher(source_name, ib_bucket_name, ib_bucket_name_prefix, hive_style_partitions, source_entities_list):
+def parsing_launcher(ib_bucket_name, ib_bucket_name_prefix, dlp_bucket_name, dlp_bucket_name_prefix, hive_style_partitions, source_entities_list):
     """
     Invokes the HR Data CSV Parser to ingest data to data lake
-    :param source_name: source system name
     :param ib_bucket_name: AWS S3 bucket name in data platform accounts
     :param ib_bucket_name_prefix: AWS S3 bucket name prefix
+    :param dlp_bucket_name: AWS S3 data lake processing bucket name in data platform accounts
+    :param dlp_bucket_name_prefix: AWS S3 datalake processing bucket name prefix
     :param hive_style_partitions: S3 partitions to read the file
+    :param source_entities_list: List of entities to process
     :return: None
     """
 
@@ -263,15 +256,17 @@ def parsing_launcher(source_name, ib_bucket_name, ib_bucket_name_prefix, hive_st
 
 if __name__ == "__main__":
     # Accept parameters
-    source_system_name = sys.argv[1]
-    s3_bucket_name = sys.argv[2]
-    s3_bucket_name_prefix = sys.argv[3]
-    date_partitions = sys.argv[4]
-    list_of_source_entities = literal_eval(sys.argv[5])
+    s3_bucket_name = sys.argv[1]
+    s3_bucket_name_prefix = sys.argv[2]
+    s3_dlp_bucket_name = sys.argv[3]
+    s3_dlp_bucket_name_prefix = sys.argv[4]
+    date_partitions = sys.argv[5]
+    list_of_source_entities = literal_eval(sys.argv[6])
 
     # Invoke launcher
-    parsing_launcher(source_name=source_system_name,
-                     ib_bucket_name=s3_bucket_name,
+    parsing_launcher(ib_bucket_name=s3_bucket_name,
                      ib_bucket_name_prefix=s3_bucket_name_prefix,
+                     dlp_bucket_name=s3_dlp_bucket_name,
+                     dlp_bucket_name_prefix=s3_dlp_bucket_name_prefix,
                      hive_style_partitions=date_partitions,
                      source_entities_list=list_of_source_entities)
